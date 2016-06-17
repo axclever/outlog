@@ -1,3 +1,8 @@
+/*
+* @author Alex Clever <axclever@gmail.com>
+* 
+*/
+
 var OutLog = function (options) {
     var history = [];
     var serverUrl = "";

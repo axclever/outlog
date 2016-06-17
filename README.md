@@ -16,7 +16,9 @@ outlog.info("Outlog works!");
 ```
 
 **moduleName** - Header of your log
+
 **serverUrl** (optional) - Server url where you want to send your logs
+
 **debug** - (optinal) - In debug mode you can see logs in browser/server console immediately.
 
 ### Methods

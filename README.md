@@ -15,6 +15,8 @@ var outlog = new OutLog({
 outlog.info("Outlog works!");
 ```
 
+### Params
+
 **moduleName** - Header of your log
 
 **serverUrl** (optional) - Server url where you want to send your logs

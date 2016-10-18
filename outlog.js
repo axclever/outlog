@@ -55,7 +55,7 @@ var OutLog = function (options) {
     };
 
     var methods = {
-        info: function (msg) {
+        info: function (msg, opts) {
             var now = new Date();
             var timeStamp = getTimeStamp(now);
 
@@ -65,6 +65,10 @@ var OutLog = function (options) {
                 msg: msg,
                 timeStamp: now
             };
+
+            if(opts && opts.content){
+                point.content = opts.content;
+            }
 
             history.push(point);
 
@@ -77,16 +81,20 @@ var OutLog = function (options) {
             }
         },
 
-        error: function (msg) {
+        error: function (msg, opts) {
             var now = new Date();
             var timeStamp = getTimeStamp(now);
 
             var point = {
-                type: "info",
+                type: "error",
                 head: options.moduleName,
                 msg: msg,
                 timeStamp: now
             };
+
+            if(opts && opts.content){
+                point.content = opts.content;
+            }
 
             history.push(point);
 

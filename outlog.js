@@ -1,7 +1,7 @@
 /*
-* @author Alex Clever <axclever@gmail.com>
-* 
-*/
+ * @author Alex Clever <axclever@gmail.com>
+ *
+ */
 
 var OutLog = function (options) {
     var history = [];
@@ -9,7 +9,7 @@ var OutLog = function (options) {
     var serverLog = false;
 
     //TODO: Check and validate Url
-    if(options.serverUrl){
+    if (options.serverUrl) {
         serverLog = true;
         serverUrl = options.serverUrl
     }
@@ -28,23 +28,30 @@ var OutLog = function (options) {
             : (now.getSeconds())));
     };
 
-    var sendToServer = function(data){
+    var sendToServer = function (data) {
         var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function(){
+        xhr.onreadystatechange = function () {
             if (this.readyState != 4) return;
 
-            if(this.status != 200){
+            if (this.status != 200) {
                 console.log("OutLog: connection error");
             }
         };
 
-        var params = 'type=' + encodeURIComponent(data.type) +
-            '&head=' + encodeURIComponent(data.head) +
-            '&msg=' + encodeURIComponent(data.msg) +
-            '&timestamp=' + encodeURIComponent(data.timeStamp);
+        var jsonData = JSON.stringify({
+            timeStamp: data.timeStamp,
+            domain: document.location.origin,
+            url: document.location.href,
+            details: {
+                type: data.type,
+                message: data.msg,
+                name: data.head
+            }
+        });
 
-        xhr.open("GET", serverUrl + "?" + params, true);
-        xhr.send();
+        xhr.open("POST", serverUrl, true);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.send(jsonData);
     };
 
     var methods = {
@@ -61,7 +68,7 @@ var OutLog = function (options) {
 
             history.push(point);
 
-            if(serverLog){
+            if (serverLog) {
                 sendToServer(point);
             }
 
@@ -83,7 +90,7 @@ var OutLog = function (options) {
 
             history.push(point);
 
-            if(serverLog){
+            if (serverLog) {
                 sendToServer(point);
             }
 

@@ -45,7 +45,8 @@ var OutLog = function (options) {
             details: {
                 type: data.type,
                 message: data.msg,
-                name: data.head
+                name: data.head,
+                content: data.content
             }
         });
 
@@ -66,7 +67,7 @@ var OutLog = function (options) {
                 timeStamp: now
             };
 
-            if(opts && opts.content){
+            if (opts && opts.content) {
                 point.content = opts.content;
             }
 
@@ -92,7 +93,7 @@ var OutLog = function (options) {
                 timeStamp: now
             };
 
-            if(opts && opts.content){
+            if (opts && opts.content) {
                 point.content = opts.content;
             }
 

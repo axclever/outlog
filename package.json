@@ -2,7 +2,7 @@
   "name": "outlog",
   "version": "1.0.1",
   "description": "Simple logging package for client-based applications with export to server entry point",
-  "main": "index.js",
+  "main": "dist/build.js",
   "scripts": {
     "dev": "gulp",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,7 +14,8 @@
   "keywords": [
     "logging",
     "logger",
-    "tools"
+    "tools",
+    "outlog"
   ],
   "author": "Alex Clever <axclever@gmail.com>",
   "license": "ISC",

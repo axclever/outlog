@@ -3,14 +3,15 @@
 import gulp from 'gulp';
 import source from 'vinyl-source-stream'
 import buffer from 'vinyl-buffer'
-import babel from 'babelify'
+import babelify from 'babelify'
 import watchify from 'watchify'
 import sourcemaps from 'gulp-sourcemaps'
 import browserify from 'browserify'
+import babel from 'gulp-babel'
 
 
 function compile(watch) {
-    let bundler = watchify(browserify('./src/index.js', {debug: true}).transform(babel));
+    let bundler = watchify(browserify('./src/index.js', {debug: true}).transform(babelify));
 
     function rebundle() {
         bundler.bundle()
@@ -47,3 +48,11 @@ gulp.task('watch', () => {
 });
 
 gulp.task('default', ['watch']);
+
+gulp.task('deploy', ()=> {
+    return gulp.src('src/index.js')
+        .pipe(babel({
+            presets: ['es2015']
+        }))
+        .pipe(gulp.dest('build'));
+});

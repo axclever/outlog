@@ -50,7 +50,7 @@ gulp.task('watch', () => {
 gulp.task('default', ['watch']);
 
 gulp.task('deploy', ()=> {
-    return gulp.src('src/index.js')
+    return gulp.src('src/**/*.js')
         .pipe(babel({
             presets: ['es2015']
         }))

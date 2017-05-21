@@ -86,5 +86,10 @@ var Outlog = function () {
     return Outlog;
 }();
 
-window.Outlog = new Outlog();
+console.log(global.window);
+
+if (global.window) {
+    window.Outlog = new Outlog();
+}
+
 module.exports = new Outlog();

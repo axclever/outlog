@@ -2,6 +2,8 @@ import {getTimeStamp} from '../helpers/format'
 
 
 const checkLogDetails = (data)=> {
+    if (!data) return true;
+    
     Object.keys(data).forEach((key)=> {
         if (data[key] instanceof Function) {
             throw new Error("Outlog: You can't pass multidimensional data to logger or functions");

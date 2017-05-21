@@ -29,20 +29,26 @@ export const render = (log)=> {
 
         console.log('%c Details: ', 'background: #e5e5e5; color: #666');
         let detailsString = '%c';
-        Object.keys(log.details).forEach((key)=> {
-            detailsString += symbols.arrow + key + ": " + log.details[key] + " \n";
-        });
 
-        console.log(detailsString + '\n\n', ' color: #555');
+        if (log.details) {
+            Object.keys(log.details).forEach((key)=> {
+                detailsString += symbols.arrow + key + ": " + log.details[key] + " \n";
+            });
+
+            console.log(detailsString + '\n\n', ' color: #555');
+        }
     }
 
     if (log.type == "error") {
         console.log('%c [' + log.moduleName + "] " + ' %c ' + symbols.error + log.message + ' ',
             'background: #24292e; color: #FFF', 'background: #b90000; color: #fff');
         let detailsString = '%c';
-        Object.keys(log.details).forEach((key)=> {
-            detailsString += symbols.arrow + key + ": " + log.details[key] + " \n";
-        });
+
+        if (log.details) {
+            Object.keys(log.details).forEach((key)=> {
+                detailsString += symbols.arrow + key + ": " + log.details[key] + " \n";
+            });
+        }
 
         console.log(detailsString + '\n\n', ' color: #b90000');
     }

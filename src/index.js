@@ -68,8 +68,6 @@ class Outlog {
     }
 }
 
-if (global.window) {
-    window.Outlog = new Outlog();
-} else {
-    module.exports = new Outlog();
-}
+
+window.Outlog = new Outlog();
+module.exports = new Outlog();

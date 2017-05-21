@@ -46,7 +46,6 @@ var render = exports.render = function render(log) {
 var renderWithTime = exports.renderWithTime = function renderWithTime(log) {};
 
 },{}],2:[function(require,module,exports){
-(function (global){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /*
@@ -135,13 +134,8 @@ var Outlog = function () {
     return Outlog;
 }();
 
-if (global.window) {
-    window.Outlog = new Outlog();
-} else {
-    module.exports = new Outlog();
-}
-
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+window.Outlog = new Outlog();
+module.exports = new Outlog();
 
 },{"./helpers/format":1,"./lib/history":3,"./lib/module":4}],3:[function(require,module,exports){
 "use strict";

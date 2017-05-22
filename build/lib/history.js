@@ -54,7 +54,7 @@ var History = function () {
             checkLogDetails(details);
 
             this.messages.push({
-                module: module,
+                moduleName: module,
                 type: type,
                 message: message,
                 details: details

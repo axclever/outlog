@@ -22,8 +22,11 @@ export const rawRender = (log)=> {
     console.log(log);
 };
 
-export const render = (log)=> {
+const isBrowser = ()=> {
+    return !!global.Navigator;
+};
 
+const renderInBrowser = (log)=> {
     if (log.type == "info") {
         console.log('%c [' + log.moduleName + "] " + '%c ' + log.message + ' ', 'background: #24292e; color: #FFF', ' color: #fff; background: #107cb7');
 
@@ -51,6 +54,18 @@ export const render = (log)=> {
         }
 
         console.log(detailsString + '\n\n', ' color: #b90000');
+    }
+};
+
+const renderInConsole = (log)=> {
+    console.log(log.type.toUpperCase() + ":" + "[ " + log.moduleName + " ] " + log.message);
+};
+
+export const render = (log)=> {
+    if (isBrowser()) {
+        renderInBrowser(log);
+    } else {
+        renderInConsole(log);
     }
 };
 export const renderWithTime = (log)=> {

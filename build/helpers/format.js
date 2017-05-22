@@ -18,8 +18,11 @@ var rawRender = exports.rawRender = function rawRender(log) {
     console.log(log);
 };
 
-var render = exports.render = function render(log) {
+var isBrowser = function isBrowser() {
+    return !!global.Navigator;
+};
 
+var renderInBrowser = function renderInBrowser(log) {
     if (log.type == "info") {
         console.log('%c [' + log.moduleName + "] " + '%c ' + log.message + ' ', 'background: #24292e; color: #FFF', ' color: #fff; background: #107cb7');
 
@@ -46,6 +49,18 @@ var render = exports.render = function render(log) {
         }
 
         console.log(_detailsString + '\n\n', ' color: #b90000');
+    }
+};
+
+var renderInConsole = function renderInConsole(log) {
+    console.log(log.type.toUpperCase() + ":" + "[ " + log.moduleName + " ] " + log.message);
+};
+
+var render = exports.render = function render(log) {
+    if (isBrowser()) {
+        renderInBrowser(log);
+    } else {
+        renderInConsole(log);
     }
 };
 var renderWithTime = exports.renderWithTime = function renderWithTime(log) {};

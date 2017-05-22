@@ -20,7 +20,6 @@ var Module = function () {
     function Module(name, opts) {
         _classCallCheck(this, Module);
 
-        console.log("creating new module");
         this.options = opts;
         this.name = name;
     }

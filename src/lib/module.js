@@ -3,7 +3,6 @@ import {render} from '../helpers/format'
 
 export default class Module {
     constructor(name, opts) {
-        console.log("creating new module");
         this.options = opts;
         this.name = name;
     }

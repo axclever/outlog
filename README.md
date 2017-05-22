@@ -15,12 +15,11 @@ var Outlog = require("outlog");
 var logger = Outlog.init("Module name", {debug:true});
 
 logger.info("Initializing");
-
-logger.info("refresh()", {
-    times: 5
-});
+logger.info("refresh()");
 
 logger.error("Something wrong going here...");
 ```
 
+
+### Result
 <img src='https://github.com/aclever/outlog/blob/master/images/outlog_example.png' width='378'/>

@@ -26,19 +26,25 @@ var render = exports.render = function render(log) {
 
         console.log('%c Details: ', 'background: #e5e5e5; color: #666');
         var detailsString = '%c';
-        Object.keys(log.details).forEach(function (key) {
-            detailsString += symbols.arrow + key + ": " + log.details[key] + " \n";
-        });
 
-        console.log(detailsString + '\n\n', ' color: #555');
+        if (log.details) {
+            Object.keys(log.details).forEach(function (key) {
+                detailsString += symbols.arrow + key + ": " + log.details[key] + " \n";
+            });
+
+            console.log(detailsString + '\n\n', ' color: #555');
+        }
     }
 
     if (log.type == "error") {
         console.log('%c [' + log.moduleName + "] " + ' %c ' + symbols.error + log.message + ' ', 'background: #24292e; color: #FFF', 'background: #b90000; color: #fff');
         var _detailsString = '%c';
-        Object.keys(log.details).forEach(function (key) {
-            _detailsString += symbols.arrow + key + ": " + log.details[key] + " \n";
-        });
+
+        if (log.details) {
+            Object.keys(log.details).forEach(function (key) {
+                _detailsString += symbols.arrow + key + ": " + log.details[key] + " \n";
+            });
+        }
 
         console.log(_detailsString + '\n\n', ' color: #b90000');
     }
@@ -46,6 +52,7 @@ var render = exports.render = function render(log) {
 var renderWithTime = exports.renderWithTime = function renderWithTime(log) {};
 
 },{}],2:[function(require,module,exports){
+(function (global){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /*
@@ -134,8 +141,15 @@ var Outlog = function () {
     return Outlog;
 }();
 
-window.Outlog = new Outlog();
+console.log(global.window);
+
+if (global.window) {
+    window.Outlog = new Outlog();
+}
+
 module.exports = new Outlog();
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
 },{"./helpers/format":1,"./lib/history":3,"./lib/module":4}],3:[function(require,module,exports){
 "use strict";
@@ -151,6 +165,8 @@ var _format = require("../helpers/format");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var checkLogDetails = function checkLogDetails(data) {
+    if (!data) return true;
+
     Object.keys(data).forEach(function (key) {
         if (data[key] instanceof Function) {
             throw new Error("Outlog: You can't pass multidimensional data to logger or functions");

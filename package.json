@@ -2,7 +2,7 @@
   "name": "outlog",
   "version": "1.0.4",
   "description": "Simple logging package for client-based applications with export to server entry point",
-  "main": "build/build.js",
+  "main": "build/outlog.js",
   "scripts": {
     "dev": "gulp",
     "deploy": "gulp deploy",

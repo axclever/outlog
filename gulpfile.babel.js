@@ -11,7 +11,7 @@ import babel from 'gulp-babel'
 
 
 function compile(watch) {
-    let bundler = watchify(browserify('./src/index.js', {debug: true}).transform(babelify));
+    let bundler = watchify(browserify('./src/outlog.js', {debug: true}).transform(babelify));
 
     function rebundle() {
         bundler.bundle()

@@ -26,10 +26,10 @@ var renderInBrowser = function renderInBrowser(log) {
     if (log.type == "info") {
         console.log('%c [' + log.moduleName + "] " + '%c ' + log.message + ' ', 'background: #24292e; color: #FFF', ' color: #fff; background: #107cb7');
 
-        console.log('%c Details: ', 'background: #e5e5e5; color: #666');
-        var detailsString = '%c';
-
         if (log.details) {
+            console.log('%c Details: ', 'background: #e5e5e5; color: #666');
+            var detailsString = '%c';
+
             Object.keys(log.details).forEach(function (key) {
                 detailsString += symbols.arrow + key + ": " + log.details[key] + " \n";
             });
@@ -40,15 +40,14 @@ var renderInBrowser = function renderInBrowser(log) {
 
     if (log.type == "error") {
         console.log('%c [' + log.moduleName + "] " + ' %c ' + symbols.error + log.message + ' ', 'background: #24292e; color: #FFF', 'background: #b90000; color: #fff');
-        var _detailsString = '%c';
 
         if (log.details) {
+            var _detailsString = '%c';
             Object.keys(log.details).forEach(function (key) {
                 _detailsString += symbols.arrow + key + ": " + log.details[key] + " \n";
             });
+            console.log(_detailsString + '\n\n', ' color: #b90000');
         }
-
-        console.log(_detailsString + '\n\n', ' color: #b90000');
     }
 };
 

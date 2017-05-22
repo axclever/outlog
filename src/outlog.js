@@ -68,9 +68,6 @@ class Outlog {
     }
 }
 
-
-console.log(global.window);
-
 if (global.window) {
     window.Outlog = new Outlog();
 }

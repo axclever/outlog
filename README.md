@@ -23,3 +23,4 @@ logger.info("refresh()", {
 logger.error("Something wrong going here...");
 ```
 
+<img src='https://github.com/axclever/outlog/blob/master/images/outlog_example.png'/>

@@ -39,6 +39,34 @@ var Module = function () {
             }
         }
     }, {
+        key: 'warning',
+        value: function warning(message, details) {
+            _history2.default.write(this.name, "warning", message, details);
+
+            if (this.options.debug) {
+                (0, _format.render)({
+                    moduleName: this.name,
+                    message: message,
+                    details: details,
+                    type: "warning"
+                });
+            }
+        }
+    }, {
+        key: 'success',
+        value: function success(message, details) {
+            _history2.default.write(this.name, "success", message, details);
+
+            if (this.options.debug) {
+                (0, _format.render)({
+                    moduleName: this.name,
+                    message: message,
+                    details: details,
+                    type: "success"
+                });
+            }
+        }
+    }, {
         key: 'error',
         value: function error(message, details) {
             _history2.default.write(this.name, "error", message, details);

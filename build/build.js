@@ -26,17 +26,17 @@ var isBrowser = function isBrowser() {
 
 var renderInBrowser = function renderInBrowser(log) {
     if (log.type == "info") {
-        console.log('%c [' + log.moduleName + "] " + '%c ' + log.message + ' ', 'background: #24292e; color: #FFF', ' color: #fff; background: #107cb7');
+        console.log('%c [' + log.moduleName + "] " + '%c ' + log.message + ' ', 'background: #24292e; color: #FFF', ' color: #fff; background: #8a939a');
 
         if (log.details) {
-            console.log('%c Details: ', 'background: #e5e5e5; color: #666');
+            // console.log('%c Details: ', 'background: #e5e5e5; color: #666');
             var detailsString = '%c';
 
             Object.keys(log.details).forEach(function (key) {
                 detailsString += symbols.arrow + key + ": " + log.details[key] + " \n";
             });
 
-            console.log(detailsString + '\n\n', ' color: #555');
+            console.log(detailsString + '\n\n', ' color: #8a939a');
         }
     }
 
@@ -49,6 +49,30 @@ var renderInBrowser = function renderInBrowser(log) {
                 _detailsString += symbols.arrow + key + ": " + log.details[key] + " \n";
             });
             console.log(_detailsString + '\n\n', ' color: #b90000');
+        }
+    }
+
+    if (log.type == "warning") {
+        console.log('%c [' + log.moduleName + "] " + ' %c ' + symbols.warn + log.message + ' ', 'background: #24292e; color: #FFF', 'background: #bf7121; color: #fff;');
+
+        if (log.details) {
+            var _detailsString2 = '%c';
+            Object.keys(log.details).forEach(function (key) {
+                _detailsString2 += symbols.arrow + key + ": " + log.details[key] + " \n";
+            });
+            console.log(_detailsString2 + '\n\n', ' color: #bf7121');
+        }
+    }
+
+    if (log.type == "success") {
+        console.log('%c [' + log.moduleName + "] " + ' %c ' + symbols.success + log.message + ' ', 'background: #24292e; color: #FFF', 'background: #1a9635; color: #fff;');
+
+        if (log.details) {
+            var _detailsString3 = '%c';
+            Object.keys(log.details).forEach(function (key) {
+                _detailsString3 += symbols.arrow + key + ": " + log.details[key] + " \n";
+            });
+            console.log(_detailsString3 + '\n\n', ' color: #1a9635');
         }
     }
 };
@@ -190,6 +214,34 @@ var Module = function () {
             }
         }
     }, {
+        key: 'warning',
+        value: function warning(message, details) {
+            _history2.default.write(this.name, "warning", message, details);
+
+            if (this.options.debug) {
+                (0, _format.render)({
+                    moduleName: this.name,
+                    message: message,
+                    details: details,
+                    type: "warning"
+                });
+            }
+        }
+    }, {
+        key: 'success',
+        value: function success(message, details) {
+            _history2.default.write(this.name, "success", message, details);
+
+            if (this.options.debug) {
+                (0, _format.render)({
+                    moduleName: this.name,
+                    message: message,
+                    details: details,
+                    type: "success"
+                });
+            }
+        }
+    }, {
         key: 'error',
         value: function error(message, details) {
             _history2.default.write(this.name, "error", message, details);
@@ -222,6 +274,8 @@ exports.default = Module;
 },{"../helpers/format":1,"./history":2}],4:[function(require,module,exports){
 (function (global){
 'use strict';
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /*
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @author Alex Clever <axclever@gmail.com>
@@ -278,7 +332,8 @@ var Outlog = function () {
                 throw new Error("Outlog Error: use .config() method before initializing modules");
             }
 
-            // this.options = Object.assign(this.options, args);
+            _extends({}, {});
+
             _history2.default.config(this.options);
         }
     }, {
@@ -292,7 +347,7 @@ var Outlog = function () {
                 throw new Error("init method: wrong parameter 'args'. Should be an object");
             }
 
-            var options = Object.assign(this.options, args);
+            var options = _extends(this.options, args);
             var trimmedName = moduleName.trim().replace(/\ /ig, "_");
 
             if (!Modules[trimmedName]) {

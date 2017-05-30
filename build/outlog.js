@@ -1,5 +1,7 @@
 'use strict';
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /*
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @author Alex Clever <axclever@gmail.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       *
@@ -55,7 +57,6 @@ var Outlog = function () {
                 throw new Error("Outlog Error: use .config() method before initializing modules");
             }
 
-            // this.options = Object.assign(this.options, args);
             _history2.default.config(this.options);
         }
     }, {
@@ -69,7 +70,7 @@ var Outlog = function () {
                 throw new Error("init method: wrong parameter 'args'. Should be an object");
             }
 
-            var options = Object.assign(this.options, args);
+            var options = _extends(this.options, args);
             var trimmedName = moduleName.trim().replace(/\ /ig, "_");
 
             if (!Modules[trimmedName]) {

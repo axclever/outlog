@@ -11,7 +11,9 @@ import babel from 'gulp-babel'
 
 
 function compile(watch) {
-    let bundler = watchify(browserify('./src/outlog.js', {debug: true}).transform(babelify));
+    let bundler = watchify(browserify('./src/outlog.js', {debug: true}).transform(babelify.configure({
+        plugins: ["transform-object-assign"]
+    })));
 
     function rebundle() {
         bundler.bundle()
@@ -52,6 +54,7 @@ gulp.task('default', ['watch']);
 gulp.task('deploy', ()=> {
     return gulp.src('src/**/*.js')
         .pipe(babel({
+            "plugins": ["transform-object-assign"],
             presets: ['es2015']
         }))
         .pipe(gulp.dest('build'));

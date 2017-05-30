@@ -24,17 +24,17 @@ var isBrowser = function isBrowser() {
 
 var renderInBrowser = function renderInBrowser(log) {
     if (log.type == "info") {
-        console.log('%c [' + log.moduleName + "] " + '%c ' + log.message + ' ', 'background: #24292e; color: #FFF', ' color: #fff; background: #107cb7');
+        console.log('%c [' + log.moduleName + "] " + '%c ' + log.message + ' ', 'background: #24292e; color: #FFF', ' color: #fff; background: #8a939a');
 
         if (log.details) {
-            console.log('%c Details: ', 'background: #e5e5e5; color: #666');
+            // console.log('%c Details: ', 'background: #e5e5e5; color: #666');
             var detailsString = '%c';
 
             Object.keys(log.details).forEach(function (key) {
                 detailsString += symbols.arrow + key + ": " + log.details[key] + " \n";
             });
 
-            console.log(detailsString + '\n\n', ' color: #555');
+            console.log(detailsString + '\n\n', ' color: #8a939a');
         }
     }
 
@@ -47,6 +47,30 @@ var renderInBrowser = function renderInBrowser(log) {
                 _detailsString += symbols.arrow + key + ": " + log.details[key] + " \n";
             });
             console.log(_detailsString + '\n\n', ' color: #b90000');
+        }
+    }
+
+    if (log.type == "warning") {
+        console.log('%c [' + log.moduleName + "] " + ' %c ' + symbols.warn + log.message + ' ', 'background: #24292e; color: #FFF', 'background: #bf7121; color: #fff;');
+
+        if (log.details) {
+            var _detailsString2 = '%c';
+            Object.keys(log.details).forEach(function (key) {
+                _detailsString2 += symbols.arrow + key + ": " + log.details[key] + " \n";
+            });
+            console.log(_detailsString2 + '\n\n', ' color: #bf7121');
+        }
+    }
+
+    if (log.type == "success") {
+        console.log('%c [' + log.moduleName + "] " + ' %c ' + symbols.success + log.message + ' ', 'background: #24292e; color: #FFF', 'background: #1a9635; color: #fff;');
+
+        if (log.details) {
+            var _detailsString3 = '%c';
+            Object.keys(log.details).forEach(function (key) {
+                _detailsString3 += symbols.arrow + key + ": " + log.details[key] + " \n";
+            });
+            console.log(_detailsString3 + '\n\n', ' color: #1a9635');
         }
     }
 };

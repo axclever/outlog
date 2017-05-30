@@ -20,6 +20,32 @@ export default class Module {
         }
     }
 
+    warning(message, details) {
+        History.write(this.name, "warning", message, details);
+
+        if (this.options.debug) {
+            render({
+                moduleName: this.name,
+                message: message,
+                details: details,
+                type: "warning"
+            });
+        }
+    }
+
+    success(message, details) {
+        History.write(this.name, "success", message, details);
+
+        if (this.options.debug) {
+            render({
+                moduleName: this.name,
+                message: message,
+                details: details,
+                type: "success"
+            });
+        }
+    }
+
     error(message, details) {
         History.write(this.name, "error", message, details);
 

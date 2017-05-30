@@ -55,7 +55,7 @@ var Outlog = function () {
                 throw new Error("Outlog Error: use .config() method before initializing modules");
             }
 
-            this.options = Object.assign(this.options, args);
+            // this.options = Object.assign(this.options, args);
             _history2.default.config(this.options);
         }
     }, {

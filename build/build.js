@@ -1,4 +1,5 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function (global){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -19,15 +20,18 @@ var rawRender = exports.rawRender = function rawRender(log) {
     console.log(log);
 };
 
-var render = exports.render = function render(log) {
+var isBrowser = function isBrowser() {
+    return !!global.Navigator;
+};
 
+var renderInBrowser = function renderInBrowser(log) {
     if (log.type == "info") {
         console.log('%c [' + log.moduleName + "] " + '%c ' + log.message + ' ', 'background: #24292e; color: #FFF', ' color: #fff; background: #107cb7');
 
-        console.log('%c Details: ', 'background: #e5e5e5; color: #666');
-        var detailsString = '%c';
-
         if (log.details) {
+            console.log('%c Details: ', 'background: #e5e5e5; color: #666');
+            var detailsString = '%c';
+
             Object.keys(log.details).forEach(function (key) {
                 detailsString += symbols.arrow + key + ": " + log.details[key] + " \n";
             });
@@ -38,20 +42,184 @@ var render = exports.render = function render(log) {
 
     if (log.type == "error") {
         console.log('%c [' + log.moduleName + "] " + ' %c ' + symbols.error + log.message + ' ', 'background: #24292e; color: #FFF', 'background: #b90000; color: #fff');
-        var _detailsString = '%c';
 
         if (log.details) {
+            var _detailsString = '%c';
             Object.keys(log.details).forEach(function (key) {
                 _detailsString += symbols.arrow + key + ": " + log.details[key] + " \n";
             });
+            console.log(_detailsString + '\n\n', ' color: #b90000');
         }
+    }
+};
 
-        console.log(_detailsString + '\n\n', ' color: #b90000');
+var renderInConsole = function renderInConsole(log) {
+    console.log(log.type.toUpperCase() + ":" + "[ " + log.moduleName + " ] " + log.message);
+};
+
+var render = exports.render = function render(log) {
+    if (isBrowser()) {
+        renderInBrowser(log);
+    } else {
+        renderInConsole(log);
     }
 };
 var renderWithTime = exports.renderWithTime = function renderWithTime(log) {};
 
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+
 },{}],2:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _format = require("../helpers/format");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var checkLogDetails = function checkLogDetails(data) {
+    if (!data) return true;
+
+    Object.keys(data).forEach(function (key) {
+        if (data[key] instanceof Function) {
+            throw new Error("Outlog: You can't pass multidimensional data to logger or functions");
+        }
+
+        if (data[key] instanceof Object) {
+
+            Object.keys(data[key]).forEach(function (k2) {
+                if (data[key][k2] instanceof Object) {
+                    throw new Error("Outlog: You can't pass multidimensional data to logger");
+                }
+
+                if (data[key][k2] instanceof Array) {
+                    throw new Error("Outlog: You can't pass multidimensional data to logger");
+                }
+            });
+        }
+    });
+};
+
+var History = function () {
+    function History() {
+        _classCallCheck(this, History);
+
+        this.localStorage = false;
+        this.showTimeStamps = false;
+        this.messages = [];
+    }
+
+    _createClass(History, [{
+        key: "config",
+        value: function config(options) {
+            this.localStorage = options.useMemory;
+            this.showTimeStamps = options.showTime;
+        }
+    }, {
+        key: "write",
+        value: function write(module, type, message, details) {
+            checkLogDetails(details);
+
+            this.messages.push({
+                moduleName: module,
+                type: type,
+                message: message,
+                details: details
+            });
+        }
+    }, {
+        key: "getTrace",
+        value: function getTrace() {
+            if (this.localStorage) {
+                console.log("read all from local storage");
+                // return localstorage trace
+            } else {
+                return this.messages;
+            }
+        }
+    }]);
+
+    return History;
+}();
+
+exports.default = new History();
+
+},{"../helpers/format":1}],3:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _history = require('./history');
+
+var _history2 = _interopRequireDefault(_history);
+
+var _format = require('../helpers/format');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Module = function () {
+    function Module(name, opts) {
+        _classCallCheck(this, Module);
+
+        this.options = opts;
+        this.name = name;
+    }
+
+    _createClass(Module, [{
+        key: 'info',
+        value: function info(message, details) {
+            _history2.default.write(this.name, "info", message, details);
+
+            if (this.options.debug) {
+                (0, _format.render)({
+                    moduleName: this.name,
+                    message: message,
+                    details: details,
+                    type: "info"
+                });
+            }
+        }
+    }, {
+        key: 'error',
+        value: function error(message, details) {
+            _history2.default.write(this.name, "error", message, details);
+
+            if (this.options.debug) {
+                (0, _format.render)({
+                    moduleName: this.name,
+                    message: message,
+                    details: details,
+                    type: "error"
+                });
+            }
+        }
+    }, {
+        key: 'trace',
+        value: function trace(args) {
+            var allHistory = _history2.default.getTrace();
+
+            allHistory.forEach(function (log) {
+                (0, _format.render)(log);
+            });
+        }
+    }]);
+
+    return Module;
+}();
+
+exports.default = Module;
+
+},{"../helpers/format":1,"./history":2}],4:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -110,7 +278,7 @@ var Outlog = function () {
                 throw new Error("Outlog Error: use .config() method before initializing modules");
             }
 
-            this.options = Object.assign(this.options, args);
+            // this.options = Object.assign(this.options, args);
             _history2.default.config(this.options);
         }
     }, {
@@ -141,8 +309,6 @@ var Outlog = function () {
     return Outlog;
 }();
 
-console.log(global.window);
-
 if (global.window) {
     window.Outlog = new Outlog();
 }
@@ -151,158 +317,6 @@ module.exports = new Outlog();
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"./helpers/format":1,"./lib/history":3,"./lib/module":4}],3:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _format = require("../helpers/format");
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var checkLogDetails = function checkLogDetails(data) {
-    if (!data) return true;
-
-    Object.keys(data).forEach(function (key) {
-        if (data[key] instanceof Function) {
-            throw new Error("Outlog: You can't pass multidimensional data to logger or functions");
-        }
-
-        if (data[key] instanceof Object) {
-
-            Object.keys(data[key]).forEach(function (k2) {
-                if (data[key][k2] instanceof Object) {
-                    throw new Error("Outlog: You can't pass multidimensional data to logger");
-                }
-
-                if (data[key][k2] instanceof Array) {
-                    throw new Error("Outlog: You can't pass multidimensional data to logger");
-                }
-            });
-        }
-    });
-};
-
-var History = function () {
-    function History() {
-        _classCallCheck(this, History);
-
-        this.localStorage = false;
-        this.showTimeStamps = false;
-        this.messages = [];
-    }
-
-    _createClass(History, [{
-        key: "config",
-        value: function config(options) {
-            this.localStorage = options.useMemory;
-            this.showTimeStamps = options.showTime;
-        }
-    }, {
-        key: "write",
-        value: function write(module, type, message, details) {
-            checkLogDetails(details);
-
-            this.messages.push({
-                module: module,
-                type: type,
-                message: message,
-                details: details
-            });
-        }
-    }, {
-        key: "getTrace",
-        value: function getTrace() {
-            if (this.localStorage) {
-                console.log("read all from local storage");
-                // return localstorage trace
-            } else {
-                return this.messages;
-            }
-        }
-    }]);
-
-    return History;
-}();
-
-exports.default = new History();
-
-},{"../helpers/format":1}],4:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _history = require('./history');
-
-var _history2 = _interopRequireDefault(_history);
-
-var _format = require('../helpers/format');
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Module = function () {
-    function Module(name, opts) {
-        _classCallCheck(this, Module);
-
-        console.log("creating new module");
-        this.options = opts;
-        this.name = name;
-    }
-
-    _createClass(Module, [{
-        key: 'info',
-        value: function info(message, details) {
-            _history2.default.write(this.name, "info", message, details);
-
-            if (this.options.debug) {
-                (0, _format.render)({
-                    moduleName: this.name,
-                    message: message,
-                    details: details,
-                    type: "info"
-                });
-            }
-        }
-    }, {
-        key: 'error',
-        value: function error(message, details) {
-            _history2.default.write(this.name, "error", message, details);
-
-            if (this.options.debug) {
-                (0, _format.render)({
-                    moduleName: this.name,
-                    message: message,
-                    details: details,
-                    type: "error"
-                });
-            }
-        }
-    }, {
-        key: 'trace',
-        value: function trace(args) {
-            var allHistory = _history2.default.getTrace();
-
-            allHistory.forEach(function (log) {
-                (0, _format.render)(log);
-            });
-        }
-    }]);
-
-    return Module;
-}();
-
-exports.default = Module;
-
-},{"../helpers/format":1,"./history":3}]},{},[2])
+},{"./helpers/format":1,"./lib/history":2,"./lib/module":3}]},{},[4])
 
 //# sourceMappingURL=build.js.map

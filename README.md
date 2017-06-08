@@ -12,7 +12,13 @@ npm install outlog --save-dev
 
 ```js
 var Outlog = require("outlog");
-var logger = Outlog.init("Module name", {debug:true});
+
+Outlog.config({
+  serverUrl: "https://outlog.sitename.com/api/collect/",
+  debug: true
+});
+
+var logger = Outlog.init("Module name", {debug:true, sync: false});
 
 logger.info("Initializing");
 logger.info("refresh()");

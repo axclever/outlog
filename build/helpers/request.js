@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-var sendToServer = exports.sendToServer = function sendToServer(serverUrl, data) {
+var send = exports.send = function send(serverUrl, data) {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {
         if (this.readyState != 4) return;
@@ -14,14 +14,13 @@ var sendToServer = exports.sendToServer = function sendToServer(serverUrl, data)
     };
 
     var jsonData = JSON.stringify({
-        timeStamp: data.timeStamp,
-        domain: document.location.origin,
-        url: document.location.href,
-        details: {
-            type: data.type,
-            message: data.msg,
-            moduleName: data.moduleName,
-            content: data.content
+        moduleName: data.moduleName,
+        type: data.type,
+        message: data.message,
+        details: data.details,
+        meta: {
+            domain: document.location.origin,
+            url: document.location.href
         }
     });
 

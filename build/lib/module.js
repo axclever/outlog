@@ -27,7 +27,7 @@ var Module = function () {
     _createClass(Module, [{
         key: 'info',
         value: function info(message, details) {
-            _history2.default.write(this.name, "info", message, details);
+            _history2.default.write(this.name, "info", message, details, this.options);
 
             if (this.options.debug) {
                 (0, _format.render)({
@@ -41,7 +41,7 @@ var Module = function () {
     }, {
         key: 'warning',
         value: function warning(message, details) {
-            _history2.default.write(this.name, "warning", message, details);
+            _history2.default.write(this.name, "warning", message, details, this.options);
 
             if (this.options.debug) {
                 (0, _format.render)({
@@ -55,7 +55,7 @@ var Module = function () {
     }, {
         key: 'success',
         value: function success(message, details) {
-            _history2.default.write(this.name, "success", message, details);
+            _history2.default.write(this.name, "success", message, details, this.options);
 
             if (this.options.debug) {
                 (0, _format.render)({
@@ -69,7 +69,7 @@ var Module = function () {
     }, {
         key: 'error',
         value: function error(message, details) {
-            _history2.default.write(this.name, "error", message, details);
+            _history2.default.write(this.name, "error", message, details, this.options);
 
             if (this.options.debug) {
                 (0, _format.render)({

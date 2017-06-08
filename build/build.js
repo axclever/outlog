@@ -198,7 +198,6 @@ var History = function () {
             this.messages.push(logData);
 
             if (options.sync == false) {
-                console.log("disable server logs");
                 return false;
             }
 
@@ -206,9 +205,6 @@ var History = function () {
 
             if (serverUrl && this.state.sync) {
                 (0, _request.send)(serverUrl, logData);
-                console.log("get settings for module");
-                console.log("get system information and extend sys info");
-                console.log("send data to server");
             }
         }
     }, {

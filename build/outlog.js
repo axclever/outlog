@@ -33,6 +33,7 @@ var Outlog = function () {
             debug: false,
             colors: true,
             serverUrl: false,
+            sync: true,
             memory: false
         };
 
@@ -50,13 +51,7 @@ var Outlog = function () {
     _createClass(Outlog, [{
         key: 'config',
         value: function config(args) {
-            // server
-            // history
-            // global debug mode
-            if (Object.keys(Modules).length > 0) {
-                throw new Error("Outlog Error: use .config() method before initializing modules");
-            }
-
+            this.options = _extends({}, this.options, args);
             _history2.default.config(this.options);
         }
     }, {
@@ -70,7 +65,7 @@ var Outlog = function () {
                 throw new Error("init method: wrong parameter 'args'. Should be an object");
             }
 
-            var options = _extends(this.options, args);
+            var options = _extends({}, this.options, args);
             var trimmedName = moduleName.trim().replace(/\ /ig, "_");
 
             if (!Modules[trimmedName]) {

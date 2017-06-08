@@ -8,7 +8,7 @@ export default class Module {
     }
 
     info(message, details) {
-        History.write(this.name, "info", message, details);
+        History.write(this.name, "info", message, details, this.options);
 
         if (this.options.debug) {
             render({
@@ -21,7 +21,7 @@ export default class Module {
     }
 
     warning(message, details) {
-        History.write(this.name, "warning", message, details);
+        History.write(this.name, "warning", message, details, this.options);
 
         if (this.options.debug) {
             render({
@@ -34,7 +34,7 @@ export default class Module {
     }
 
     success(message, details) {
-        History.write(this.name, "success", message, details);
+        History.write(this.name, "success", message, details, this.options);
 
         if (this.options.debug) {
             render({
@@ -47,7 +47,7 @@ export default class Module {
     }
 
     error(message, details) {
-        History.write(this.name, "error", message, details);
+        History.write(this.name, "error", message, details, this.options);
 
         if (this.options.debug) {
             render({

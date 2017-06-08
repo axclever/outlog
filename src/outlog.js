@@ -9,9 +9,7 @@ import ModuleFactory from './lib/module'
 import History from './lib/history'
 import {render} from './helpers/format'
 
-
 const Modules = {};
-
 
 class Outlog {
     constructor() {
@@ -19,6 +17,7 @@ class Outlog {
             debug: false,
             colors: true,
             serverUrl: false,
+            sync: true,
             memory: false
         };
 
@@ -34,13 +33,7 @@ class Outlog {
     }
 
     config(args) {
-        // server
-        // history
-        // global debug mode
-        if (Object.keys(Modules).length > 0) {
-            throw new Error("Outlog Error: use .config() method before initializing modules");
-        }
-
+        this.options = Object.assign({}, this.options, args);
         History.config(this.options);
     }
 
@@ -53,14 +46,16 @@ class Outlog {
             throw new Error("init method: wrong parameter 'args'. Should be an object");
         }
 
-        let options = Object.assign(this.options, args);
+        let options = Object.assign({}, this.options, args);
         let trimmedName = moduleName.trim().replace(/\ /ig, "_");
+
 
         if (!Modules[trimmedName]) {
             let module = new ModuleFactory(trimmedName, options);
             Modules[trimmedName] = module;
             this.trace[trimmedName] = module.trace;
             return module;
+
         } else {
             throw new Error("Outlog Error: module already exist, use another name");
         }

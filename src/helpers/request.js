@@ -1,4 +1,4 @@
-export const sendToServer = (serverUrl, data) => {
+export const send = (serverUrl, data) => {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {
         if (this.readyState != 4) return;
@@ -9,14 +9,13 @@ export const sendToServer = (serverUrl, data) => {
     };
 
     var jsonData = JSON.stringify({
-        timeStamp: data.timeStamp,
-        domain: document.location.origin,
-        url: document.location.href,
-        details: {
-            type: data.type,
-            message: data.msg,
-            moduleName: data.moduleName,
-            content: data.content
+        moduleName: data.moduleName,
+        type: data.type,
+        message: data.message,
+        details: data.details,
+        meta: {
+            domain: document.location.origin,
+            url: document.location.href
         }
     });
 

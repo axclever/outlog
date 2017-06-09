@@ -18,6 +18,7 @@ var send = exports.send = function send(serverUrl, data) {
         type: data.type,
         message: data.message,
         details: data.details,
+        publicKey: data.publicKey,
         meta: {
             domain: document.location.origin,
             url: document.location.href

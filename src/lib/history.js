@@ -50,12 +50,9 @@ class History {
             moduleName: module,
             type: type,
             message: message,
-            details: details
+            details: details,
+            publicKey: options.publicKey
         };
-
-        if (options.publicKey) {
-            logData.publicKey = options.publicKey;
-        }
 
         this.messages.push(logData);
 

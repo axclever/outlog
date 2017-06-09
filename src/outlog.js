@@ -18,7 +18,8 @@ class Outlog {
             colors: true,
             serverUrl: false,
             sync: true,
-            memory: false
+            memory: false,
+            publicKey: null
         };
 
         this.trace = {

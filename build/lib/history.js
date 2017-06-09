@@ -68,6 +68,10 @@ var History = function () {
                 details: details
             };
 
+            if (options.publicKey) {
+                logData.publicKey = options.publicKey;
+            }
+
             this.messages.push(logData);
 
             if (options.sync == false) {

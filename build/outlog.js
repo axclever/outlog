@@ -23,12 +23,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Modules = {};
-
 var Outlog = function () {
     function Outlog() {
         _classCallCheck(this, Outlog);
 
+        this.modules = {};
         this.options = {
             debug: false,
             colors: true,
@@ -69,9 +68,11 @@ var Outlog = function () {
             var options = _extends({}, this.options, args);
             var trimmedName = moduleName.trim().replace(/\ /ig, "_");
 
-            if (!Modules[trimmedName]) {
+            var self = this;
+
+            if (!self.modules[trimmedName]) {
                 var _module = new _module3.default(trimmedName, options);
-                Modules[trimmedName] = _module;
+                self.modules[trimmedName] = _module;
                 this.trace[trimmedName] = _module.trace;
                 return _module;
             } else {
@@ -89,4 +90,10 @@ if (global.window) {
     }
 }
 
-module.exports = new Outlog();
+var outlog = new Outlog();
+
+console.log("Outlog initialize");
+
+module.exports = function () {
+    return outlog;
+}();

@@ -9,10 +9,10 @@ import ModuleFactory from './lib/module'
 import History from './lib/history'
 import {render} from './helpers/format'
 
-const Modules = {};
 
 class Outlog {
     constructor() {
+        this.modules = {};
         this.options = {
             debug: false,
             colors: true,
@@ -51,9 +51,11 @@ class Outlog {
         let trimmedName = moduleName.trim().replace(/\ /ig, "_");
 
 
-        if (!Modules[trimmedName]) {
+        const self = this;
+
+        if (!self.modules[trimmedName]) {
             let module = new ModuleFactory(trimmedName, options);
-            Modules[trimmedName] = module;
+            self.modules[trimmedName] = module;
             this.trace[trimmedName] = module.trace;
             return module;
 
@@ -69,4 +71,10 @@ if (global.window) {
     }
 }
 
-module.exports = new Outlog();
+const outlog = new Outlog();
+
+console.log("Outlog initialize");
+
+module.exports = (()=> {
+    return outlog;
+})();

@@ -84,7 +84,9 @@ var Outlog = function () {
 }();
 
 if (global.window) {
-    window.Outlog = new Outlog();
+    if (!window.Outlog) {
+        window.Outlog = new Outlog();
+    }
 }
 
 module.exports = new Outlog();

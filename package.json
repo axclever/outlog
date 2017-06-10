@@ -1,6 +1,6 @@
 {
   "name": "outlog",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Simple logging package for client-based applications with export to server entry point",
   "main": "build/outlog.js",
   "scripts": {

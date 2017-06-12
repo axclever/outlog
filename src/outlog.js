@@ -71,10 +71,4 @@ if (global.window) {
     }
 }
 
-const outlog = new Outlog();
-
-console.log("Outlog initialize");
-
-module.exports = (()=> {
-    return outlog;
-})();
+module.exports = new Outlog();

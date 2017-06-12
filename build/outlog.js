@@ -90,10 +90,4 @@ if (global.window) {
     }
 }
 
-var outlog = new Outlog();
-
-console.log("Outlog initialize");
-
-module.exports = function () {
-    return outlog;
-}();
+module.exports = new Outlog();

@@ -34,7 +34,7 @@ class Outlog {
 
         this.print = {
             all: (args)=> {
-                if (args.debug) {
+                if (args && args.debug) {
                     Cookie.createCookie("all", "debug");
                 } else {
                     Cookie.deleteCookie("all");

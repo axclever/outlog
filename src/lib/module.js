@@ -76,7 +76,7 @@ export default class Module {
 
 
     print(args) {
-        if (args.debug) {
+        if (args && args.debug) {
             Cookie.createCookie(this.name || "all", "debug");
         } else {
             Cookie.deleteCookie(this.name || "all");

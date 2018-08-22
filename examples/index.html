@@ -1,16 +1,19 @@
 <html>
 <head>
     <title>Outlog | Test</title>
+    <meta charset="UTF-8"/>
     <script src="/build/build.js"></script>
 </head>
 <body>
 
 <script>
     var logger1 = Outlog.init("Module1");
-    logger1.info("hello1");
+    logger1.info("Info message", {users: 5, project: 7});
+    logger1.warning("Error message");
+    logger1.error("Error message", {reason: "Validation error"});
 
     var logger2 = Outlog.init("Module2");
-    logger2.info("hello2");
+    logger2.info("Second module info will not appeared");
 </script>
 </body>
 </html>

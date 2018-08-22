@@ -8,23 +8,34 @@
 npm install outlog --save-dev
 ```
 
-## Usage example
+## Default usage example
 
 ```js
 var Outlog = require("outlog");
 
-Outlog.config({
-  serverUrl: "https://outlog.sitename.com/api/collect/",
-  debug: true
-});
-
-var logger = Outlog.init("Module name", {debug:true, sync: false});
+var logger = Outlog.init("Module1", {debug:true}); // print logs to console
 
 logger.info("Initializing");
 logger.info("refresh()");
 
 logger.error("Something wrong going here...");
 ```
+
+
+### Show trace by cookie marker
+```js
+var logger = Outlog.init("Module2");
+
+logger.info("Show me only if you enable it via console!");
+```
+
+Open browser console and call method `Outlog.logger.Module2`
+
+```js
+Outlog.print.Module2({debug: true})
+```
+
+And all logs from this module will appear only for you and only in your browser
 
 
 ### Result

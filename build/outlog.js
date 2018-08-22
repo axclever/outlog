@@ -19,6 +19,8 @@ var _history2 = _interopRequireDefault(_history);
 
 var _format = require('./helpers/format');
 
+var _utils = require('./lib/utils');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -46,6 +48,16 @@ var Outlog = function () {
                 });
             }
         };
+
+        this.print = {
+            all: function all(args) {
+                if (args.debug) {
+                    _utils.Cookie.createCookie("all", "debug");
+                } else {
+                    _utils.Cookie.deleteCookie("all");
+                }
+            }
+        };
     }
 
     _createClass(Outlog, [{
@@ -68,12 +80,13 @@ var Outlog = function () {
             var options = _extends({}, this.options, args);
             var trimmedName = moduleName.trim().replace(/\ /ig, "_");
 
-            var self = this;
+            var component = this;
 
-            if (!self.modules[trimmedName]) {
+            if (!component.modules[trimmedName]) {
                 var _module = new _module3.default(trimmedName, options);
-                self.modules[trimmedName] = _module;
-                this.trace[trimmedName] = _module.trace;
+                component.modules[trimmedName] = _module;
+                this.trace[trimmedName] = _module.trace.bind(_module);
+                this.print[trimmedName] = _module.print.bind(_module);
                 return _module;
             } else {
                 throw new Error("Outlog Error: module already exist, use another name");

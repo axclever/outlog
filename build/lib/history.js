@@ -83,13 +83,20 @@ var History = function () {
         }
     }, {
         key: 'getTrace',
-        value: function getTrace() {
+        value: function getTrace(moduleName) {
             if (this.state.localStorage) {
                 console.log("read all from local storage [ not implemented ]");
                 // return localstorage trace
-            } else {
-                return this.messages;
+                return false;
             }
+
+            if (moduleName) {
+                return this.messages.filter(function (msg) {
+                    return msg.moduleName == moduleName;
+                });
+            }
+
+            return this.messages;
         }
     }]);
 

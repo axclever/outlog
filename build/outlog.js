@@ -51,7 +51,7 @@ var Outlog = function () {
 
         this.print = {
             all: function all(args) {
-                if (args.debug) {
+                if (args && args.debug) {
                     _utils.Cookie.createCookie("all", "debug");
                 } else {
                     _utils.Cookie.deleteCookie("all");

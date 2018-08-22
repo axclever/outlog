@@ -100,7 +100,7 @@ var Module = function () {
     }, {
         key: 'print',
         value: function print(args) {
-            if (args.debug) {
+            if (args && args.debug) {
                 _utils.Cookie.createCookie(this.name || "all", "debug");
             } else {
                 _utils.Cookie.deleteCookie(this.name || "all");

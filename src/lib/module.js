@@ -1,8 +1,15 @@
 import History from './history'
 import {render} from '../helpers/format'
+import {Cookie} from '../lib/utils'
 
 export default class Module {
     constructor(name, opts) {
+        const debugCookie = Cookie.getCookie(name);
+
+        if (debugCookie) {
+            opts.debug = true;
+        }
+
         this.options = opts;
         this.name = name;
     }
@@ -60,10 +67,20 @@ export default class Module {
     }
 
     trace(args) {
-        let allHistory = History.getTrace();
+        let moduleHistory = History.getTrace(this.name);
 
-        allHistory.forEach((log)=> {
+        moduleHistory.forEach((log)=> {
             render(log);
         });
     }
+
+
+    print(args) {
+        if (args.debug) {
+            Cookie.createCookie(this.name || "all", "debug");
+        } else {
+            Cookie.deleteCookie(this.name || "all");
+        }
+    }
 }
+

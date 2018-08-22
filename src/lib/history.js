@@ -67,13 +67,21 @@ class History {
         }
     }
 
-    getTrace() {
+    getTrace(moduleName) {
         if (this.state.localStorage) {
             console.log("read all from local storage [ not implemented ]");
             // return localstorage trace
-        } else {
-            return this.messages;
+            return false;
         }
+
+        if (moduleName) {
+            return this.messages.filter((msg)=> {
+                return (msg.moduleName == moduleName);
+            });
+        }
+
+        return this.messages;
+
     }
 }
 

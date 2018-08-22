@@ -113,6 +113,7 @@ var send = exports.send = function send(serverUrl, data) {
         type: data.type,
         message: data.message,
         details: data.details,
+        publicKey: data.publicKey,
         meta: {
             domain: document.location.origin,
             url: document.location.href
@@ -192,12 +193,9 @@ var History = function () {
                 moduleName: module,
                 type: type,
                 message: message,
-                details: details
+                details: details,
+                publicKey: options.publicKey
             };
-
-            if (options.publicKey) {
-                logData.publicKey = options.publicKey;
-            }
 
             this.messages.push(logData);
 
@@ -213,13 +211,20 @@ var History = function () {
         }
     }, {
         key: 'getTrace',
-        value: function getTrace() {
+        value: function getTrace(moduleName) {
             if (this.state.localStorage) {
                 console.log("read all from local storage [ not implemented ]");
                 // return localstorage trace
-            } else {
-                return this.messages;
+                return false;
             }
+
+            if (moduleName) {
+                return this.messages.filter(function (msg) {
+                    return msg.moduleName == moduleName;
+                });
+            }
+
+            return this.messages;
         }
     }]);
 
@@ -243,6 +248,8 @@ var _history2 = _interopRequireDefault(_history);
 
 var _format = require('../helpers/format');
 
+var _utils = require('../lib/utils');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -250,6 +257,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var Module = function () {
     function Module(name, opts) {
         _classCallCheck(this, Module);
+
+        var debugCookie = _utils.Cookie.getCookie(name);
+
+        if (debugCookie) {
+            opts.debug = true;
+        }
 
         this.options = opts;
         this.name = name;
@@ -314,11 +327,20 @@ var Module = function () {
     }, {
         key: 'trace',
         value: function trace(args) {
-            var allHistory = _history2.default.getTrace();
+            var moduleHistory = _history2.default.getTrace(this.name);
 
-            allHistory.forEach(function (log) {
+            moduleHistory.forEach(function (log) {
                 (0, _format.render)(log);
             });
+        }
+    }, {
+        key: 'print',
+        value: function print(args) {
+            if (args.debug) {
+                _utils.Cookie.createCookie(this.name || "all", "debug");
+            } else {
+                _utils.Cookie.deleteCookie(this.name || "all");
+            }
         }
     }]);
 
@@ -327,7 +349,33 @@ var Module = function () {
 
 exports.default = Module;
 
-},{"../helpers/format":1,"./history":3}],5:[function(require,module,exports){
+},{"../helpers/format":1,"../lib/utils":5,"./history":3}],5:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var Cookie = exports.Cookie = {
+    createCookie: function createCookie(name, value, expireTime) {
+        expireTime = !!expireTime ? expireTime : 15 * 60 * 1000; // Default 15 min
+        var date = new Date();
+        date.setTime(date.getTime() + expireTime);
+        var expires = "; expires=" + date.toGMTString();
+        document.cookie = name + "=" + value + expires + "; path=/";
+    },
+    getCookie: function getCookie(name) {
+        var value = "; " + document.cookie;
+        var parts = value.split("; " + name + "=");
+        if (parts.length == 2) {
+            return parts.pop().split(";").shift();
+        }
+    },
+    deleteCookie: function deleteCookie(name) {
+        document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    }
+};
+
+},{}],6:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -350,16 +398,17 @@ var _history2 = _interopRequireDefault(_history);
 
 var _format = require('./helpers/format');
 
+var _utils = require('./lib/utils');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Modules = {};
 
 var Outlog = function () {
     function Outlog() {
         _classCallCheck(this, Outlog);
 
+        this.modules = {};
         this.options = {
             debug: false,
             colors: true,
@@ -376,6 +425,16 @@ var Outlog = function () {
                 allHistory.forEach(function (message) {
                     (0, _format.render)(message);
                 });
+            }
+        };
+
+        this.print = {
+            all: function all(args) {
+                if (args.debug) {
+                    _utils.Cookie.createCookie("all", "debug");
+                } else {
+                    _utils.Cookie.deleteCookie("all");
+                }
             }
         };
     }
@@ -400,10 +459,13 @@ var Outlog = function () {
             var options = _extends({}, this.options, args);
             var trimmedName = moduleName.trim().replace(/\ /ig, "_");
 
-            if (!Modules[trimmedName]) {
+            var component = this;
+
+            if (!component.modules[trimmedName]) {
                 var _module = new _module3.default(trimmedName, options);
-                Modules[trimmedName] = _module;
-                this.trace[trimmedName] = _module.trace;
+                component.modules[trimmedName] = _module;
+                this.trace[trimmedName] = _module.trace.bind(_module);
+                this.print[trimmedName] = _module.print.bind(_module);
                 return _module;
             } else {
                 throw new Error("Outlog Error: module already exist, use another name");
@@ -415,13 +477,15 @@ var Outlog = function () {
 }();
 
 if (global.window) {
-    window.Outlog = new Outlog();
+    if (!window.Outlog) {
+        window.Outlog = new Outlog();
+    }
 }
 
 module.exports = new Outlog();
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{"./helpers/format":1,"./lib/history":3,"./lib/module":4}]},{},[5])
+},{"./helpers/format":1,"./lib/history":3,"./lib/module":4,"./lib/utils":5}]},{},[6])
 
 //# sourceMappingURL=build.js.map
